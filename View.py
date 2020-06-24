@@ -27,6 +27,7 @@ class GraphicalView:
         self.background.fill(Const.BACKGROUND_COLOR)
 
         self.winmsg = "Time up"
+        self.attack = 1
 
     def initialize(self):
         '''
@@ -79,7 +80,21 @@ class GraphicalView:
         for player in self.model.players:
             center = list(map(int, player.position))
             pg.draw.circle(self.screen, Const.PLAYER_COLOR[player.player_id], center, Const.PLAYER_RADIUS)
-
+        if self.model.players[0].tag == 0 :
+            self.attack = 1
+        else:
+            self.attack = 0
+            
+        # draw player and time
+        font = pg.font.Font(None, 36)
+        text_surface = font.render( f'Players {self.attack}: {self.model.timer % Const.SWAP_TIME/10:.1f}', 1, pg.Color('white'))
+        #text_center = (Const.ARENA_SIZE[0]*0.8, Const.ARENA_SIZE[1]*0.1)
+        self.screen.blit(text_surface,(10,10))
+        # draw count down 
+        font = pg.font.Font(None, 36)
+        text_surface = font.render(f'Time {self.model.timer/10:.1f}', 1, pg.Color('white'))
+        #text_center = (Const.ARENA_SIZE[0]*0.8, Const.ARENA_SIZE[1]*0.15)
+        self.screen.blit(text_surface,(10,50))
         pg.display.flip()
 
     def render_stop(self):

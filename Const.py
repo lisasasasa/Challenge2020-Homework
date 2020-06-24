@@ -7,7 +7,7 @@ PLAYER_INIT_POSITION = [pg.Vector2(200, 400), pg.Vector2(600, 400)]
 PLAYER_RADIUS = 75
 SPEED_ATTACK = 500
 SPEED_DEFENSE = 400
-SWAP_TIME = 150
+SWAP_TIME = 5 * FPS
 DIRECTION_TO_VEC2 = {
     'up': pg.Vector2(0, -1),
     'left': pg.Vector2(-1, 0),
