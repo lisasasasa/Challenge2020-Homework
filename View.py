@@ -26,6 +26,8 @@ class GraphicalView:
         pg.display.set_caption(Const.WINDOW_CAPTION)
         self.background.fill(Const.BACKGROUND_COLOR)
 
+        self.winmsg = "Time up"
+
     def initialize(self):
         '''
         This method is called when a new game is instantiated.
@@ -47,6 +49,9 @@ class GraphicalView:
             elif cur_state == Const.STATE_PLAY: self.render_play()
             elif cur_state == Const.STATE_STOP: self.render_stop()
             elif cur_state == Const.STATE_ENDGAME: self.render_endgame()
+
+        elif isinstance(event , EventWin):
+            self.winmsg = str(event)
 
     def display_fps(self):
         '''
@@ -83,5 +88,10 @@ class GraphicalView:
     def render_endgame(self):
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
+
+        font = pg.font.Font(None, 36)
+        text_surface = font.render(self.winmsg, 1, pg.Color('gray88'))
+        text_center = (Const.ARENA_SIZE[0] / 2, Const.ARENA_SIZE[1] / 2)
+        self.screen.blit(text_surface, text_surface.get_rect(center=text_center))
 
         pg.display.flip()

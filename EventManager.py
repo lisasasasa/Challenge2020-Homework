@@ -70,7 +70,24 @@ class EventEveryTick(BaseEvent):
 class EventTimesUp(BaseEvent):
     name = "Time's Up event"
 
+class EventTimesUp(BaseEvent):
+    name = "Time's Up event"
 
+class EventCollision(BaseEvent):
+    name = "Collision"
+
+class EventWin(BaseEvent):
+    name = "win"
+
+    def __init__(self, winner):
+        self.winner = winner
+
+    def __str__(self):
+        return f'The player{self.winner} is win !!!!!!'
+
+class EventSwap(BaseEvent):
+    name = "swap"
+    
 class EventPlayerMove(BaseEvent):
     name = 'PlayerMove event'
 

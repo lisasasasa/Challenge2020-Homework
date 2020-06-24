@@ -93,8 +93,14 @@ class GameEngine:
                 self.timer -= 1
                 if self.timer == 0:
                     self.ev_manager.post(EventTimesUp())
+                if self.timer % Const.SWAP_TIME == 0:
+                    self.ev_manager.post(EventSwap())
             elif cur_state == Const.STATE_ENDGAME:
                 self.update_endgame()
+
+        elif isinstance(event, EventSwap):
+            self.players[0].tag ,  self.players[1].tag = self.players[1].tag ,  self.players[0].tag
+            self.players[0].speed , self.players[1].speed = self.players[1].speed , self.players[0].speed 
 
         elif isinstance(event, EventStateChange):
             if event.state == Const.STATE_POP:
@@ -108,9 +114,19 @@ class GameEngine:
 
         elif isinstance(event, EventPlayerMove):
             self.players[event.player_id].move_direction(event.direction)
+            if (self.players[0].position - self.players[1].position).magnitude_squared() <= 4 * Const.PLAYER_RADIUS**2:
+                self.ev_manager.post(EventCollision())
 
         elif isinstance(event, EventTimesUp):
             self.state_machine.push(Const.STATE_ENDGAME)
+        
+        elif isinstance(event, EventCollision):
+            if self.players[0].tag == 1:
+                self.ev_manager.post(EventWin(0))
+            else:
+                self.ev_manager.post(EventWin(1))
+            self.state_machine.push(Const.STATE_ENDGAME)
+            
 
     def update_menu(self):
         '''
@@ -151,6 +167,7 @@ class Player:
         self.player_id = player_id
         self.position = Const.PLAYER_INIT_POSITION[player_id] # is a pg.Vector2
         self.speed = Const.SPEED_ATTACK if player_id == 1 else Const.SPEED_DEFENSE
+        self.tag = player_id
 
     def move_direction(self, direction: str):
         '''
